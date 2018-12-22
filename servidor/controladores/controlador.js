@@ -33,10 +33,42 @@ function armarQuery(req) {
     sql = sql.concat(" limit 0," + req.query.cantidad);
   }
   sql = sql.concat(";");
-  console.log(sql);
   return sql;
 }
-
+function peliculaId(id, res) {
+  // agregar la busqueda del genero al query
+  var sql =
+    "SELECT * FROM pelicula LEFT JOIN actor_pelicula ON pelicula.id = actor_pelicula.pelicula_id JOIN actor ON actor_pelicula.actor_id = actor.id where pelicula.id=" +
+    id +
+    ";";
+  conDb.query(sql, function(error, resultado) {
+    var generoSql =
+      "SELECT * FROM genero where id=" + resultado[0].genero_id + ";";
+    conDb.query(generoSql, function(error, resultadoGenero) {
+      var actores = [];
+      console.log(resultadoGenero);
+      var pelicula = {
+        titulo: resultado[0].titulo,
+        duracion: resultado[0].duracion,
+        director: resultado[0].director,
+        poster: resultado[0].poster,
+        anio: resultado[0].anio,
+        fecha_lanzamiento: resultado[0].fecha_lanzamiento,
+        trama: resultado[0].trama,
+        puntuacion: resultado[0].puntuacion,
+        nombre: resultadoGenero[0].nombre
+      };
+      resultado.forEach(element => {
+        actores.push(element);
+      });
+      var respuesta = {
+        pelicula: pelicula,
+        actores: actores
+      };
+      res.send(respuesta);
+    });
+  });
+}
 function todasPeliculas(req, res) {
   var query = armarQuery(req);
   var sql = "select *".concat(query);
@@ -47,7 +79,6 @@ function todasPeliculas(req, res) {
         peliculas: resultado,
         total: resultadoCount[0].total
       };
-      console.log(respuesta);
       res.send(respuesta);
     });
   });
@@ -63,5 +94,6 @@ function todosGeneros(req, res) {
 }
 module.exports = {
   todasPeliculas: todasPeliculas,
-  todosGeneros: todosGeneros
+  todosGeneros: todosGeneros,
+  peliculaId: peliculaId
 };
