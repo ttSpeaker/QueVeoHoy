@@ -15,6 +15,7 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/peliculas?',controlador.todasPeliculas);
+app.get('/peliculas/recomendacion?',controlador.recomendacion);
 app.get('/peliculas/:id',function(req,res){
   var id = req.params.id;
   controlador.peliculaId(id,res);

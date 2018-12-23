@@ -4,7 +4,6 @@ $(document).ready(function() {
     //se hace el pedido al backend de todos los generos para cargalos en el listado de géneros
     $.getJSON(servidor + "/generos",
         function(data) {
-            console.log(data);
             for (i = 0; i < data.generos.length; i++) {
                 //se duplica una opcion de la lista de selección
                 var opcion = $(".genero-select option[value='0']").clone();
