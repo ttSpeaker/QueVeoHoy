@@ -92,7 +92,6 @@ function todosGeneros(req, res) {
   });
 }
 function recomendacion(req, res) {
-  console.log(req.query);
   var anioInic = req.query.anio_inicio;
   var anioFin = req.query.anio_fin;
   var manyReqs = false;
@@ -125,12 +124,10 @@ function recomendacion(req, res) {
     }
   }
   sql = sql.concat(";");
-  console.log(sql);
   conDb.query(sql, function(error, resultado) {
     var respuesta = {
       peliculas: resultado
     };
-    console.log(respuesta);
     res.send(respuesta);
   });
 }
